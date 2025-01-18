@@ -1,0 +1,109 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<div class="m-5">
+    <h1>Proveedores</h1>
+    <br>
+    <a href="{% url 'proveedores_nuevo' %}" class="btn btn-outline-info">Nuevo proveedor</a>
+</div>
+<div class="container-sm table-responsive" style="max-width: 1200px;">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Compañía</th>
+                <th>Dirección</th>
+                <th>Correo</th>
+                <th>Número de teléfono</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proveedor in proveedores %}
+            <tr>
+                <td>{{ proveedor.nombre }}</td>
+                <td>{{ proveedor.compañía }}</td>
+                <td>{{ proveedor.direccion }}</td>
+                <td>{{ proveedor.correo }}</td>
+                <td>{{ proveedor.numero }}</td>
+                <td><a href="{% url 'proveedores_actualizar' proveedor_id=proveedor.id %}" class="btn btn-outline-warning">Actualizar</a></td>
+                <td><button class="btn btn-outline-danger delete-btn" data-id="{{ proveedor.id }}">Eliminar</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Navegación de página de proveedores">
+  <ul class="pagination justify-content-center">
+    {% if proveedores.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1" aria-label="Primera">
+          &laquo; Primera
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ proveedores.previous_page_number }}" aria-label="Anterior">
+          Anterior
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">
+          &laquo; Primera
+        </span>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link">
+          Anterior
+        </span>
+      </li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">
+        Página {{ proveedores.number }} de {{ proveedores.paginator.num_pages }}
+        <span class="sr-only">(actual)</span>
+      </span>
+    </li>
+
+    {% if proveedores.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ proveedores.next_page_number }}" aria-label="Siguiente">
+          Siguiente
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ proveedores.paginator.num_pages }}" aria-label="Última">
+          Última &raquo;
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">
+          Siguiente
+        </span>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link">
+          Última &raquo;
+        </span>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+<script>
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const proveedorId = this.getAttribute('data-id');
+            const confirmacion = confirm('¿Estás seguro de que quieres eliminar este proveedor?');
+            if (confirmacion) {
+                window.location.href = `/proveedores/eliminar/${proveedorId}/`;
+            }
+        });
+    });
+</script>
+
+{% endblock content %}

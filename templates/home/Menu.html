@@ -1,0 +1,82 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+{% load static %}
+<style>
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: calc(var(--font-size) * 2.5);
+        color: var(--text-color);
+    }
+    .custom-btn {
+        font-size: var(--font-size);
+        padding: calc(var(--font-size) * 0.5) calc(var(--font-size) * 1);
+        height: calc(var(--font-size) * 12);
+        width: 100%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: 1px solid var(--button-border-color, #ccc);
+        background-color: var(--button-bg-color);
+        color: var(--button-text-color);
+    }
+    .text-title {
+        font-size: calc(var(--font-size) * 1.5);
+        font-weight: bold;
+        color: var(--text-color);
+        text-align: center;
+        margin-top: 10px;
+    }
+    .menu-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    .menu-item {
+        flex-basis: 100%;
+    }
+    @media (min-width: 576px) {
+        .menu-item {
+            flex-basis: 50%;
+        }
+    }
+    @media (min-width: 768px) {
+        .menu-item {
+            flex-basis: 32%;
+        }
+    }
+</style>
+<div class="container sm">
+    <h1>Menú Principal</h1>
+    <div class="menu-container">
+        <div class="menu-item">
+            <a href="{% url 'ordenes' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/ordenes.png' %}');"></a>
+            <div class="text-title">Ordenes</div>
+        </div>
+        <div class="menu-item">
+            <a href="{% url 'clientes' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/cliente.png' %}');"></a>
+            <div class="text-title">Clientes</div>
+        </div>
+        <div class="menu-item">
+            <a href="{% url 'proveedores' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/1198280.png' %}');"></a>
+            <div class="text-title">Proveedores</div>
+        </div>
+        <div class="menu-item">
+            <a href="{% url 'inventario' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/inventario.png' %}');"></a>
+            <div class="text-title">Inventario</div>
+        </div>
+        <div class="menu-item">
+            <a href="{% url 'reporte_ventas' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/repo.png' %}');"></a>
+            <div class="text-title">Reportes</div>
+        </div>
+        <div class="menu-item">
+            <a href="{% url 'bebidas' %}" class="btn btn-outline-dark custom-btn" style="background-image: url('{% static 'images/coffee.png' %}');"></a>
+            <div class="text-title">Bebidas</div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+

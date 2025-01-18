@@ -1,0 +1,115 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<div class="m-5">
+    <h1>Agregar Nuevo Ingrediente</h1>
+</div>
+<div class="container-sm table-responsive" style="max-width: 1200px;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form method="post" action="{% url 'inventario_nuevo' %}" class="mt-4" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" name="nombre">
+        </div>
+        <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo:</label>
+            <select class="form-select" id="tipo" name="tipo">
+                <option value="">Ninguno</option>
+                {% for tipo in tipos %}
+                    <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="lista-ingredientes" class="form-label">Verifique que no exista ya el ingrediente:</label>
+            <ul class="list-group" id="lista-ingredientes">
+                <!-- Aquí se mostrará la lista de ingredientes seleccionados -->
+            </ul>
+        </div>
+
+        <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen:</label>
+            <input type="file" class="form-control" id="imagen" name="imagen">
+        </div>
+        <div class="mb-3">
+            <label for="unidad" class="form-label">Unidad:</label>
+            <select class="form-select" id="unidad" name="unidad">
+                <option value="gramos">Gramos</option>
+                <option value="onzas">Onzas</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="precio_extra" class="form-label">Precio extra:</label>
+            <input type="number" class="form-control" id="precio_extra" name="precio_extra">
+        </div>
+        <div class="mb-3">
+            <label for="cantidad_porcion_extra" class="form-label">Cantidad extra (gramos/onzas):</label>
+            <input type="number" class="form-control" id="cantidad_porcion_extra" name="cantidad_porcion_extra">
+        </div>
+        <div class="mb-3">
+            <label for="cantidad_disponible" class="form-label">Cantidad disponible:</label>
+            <input type="number" class="form-control" id="cantidad_disponible" name="cantidad_disponible">
+        </div>
+        <div class="mb-3">
+            <label for="cantidad_minima" class="form-label">Cantidad mínima:</label>
+            <input type="number" class="form-control" id="cantidad_minima" name="cantidad_minima">
+        </div>
+        <div class="mb-3">
+            <label for="unidad_original" class="form-label">Unidad Original:</label>
+            <select class="form-select" id="unidad_original" name="unidad_original">
+                <option value="litros">Litros</option>
+                <option value="kilogramos">Kilogramos</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="proveedor" class="form-label">Proveedor:</label>
+            <select class="form-select" id="proveedor" name="proveedor">
+                <option value="">Ninguno</option>
+                {% for proveedor in proveedores %}
+                    <option value="{{ proveedor.id }}">{{ proveedor.compañía }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="detalles" class="form-label">Detalles:</label>
+            <textarea class="form-control" id="detalles" name="detalles" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Ingrediente</button>
+        <a href="{% url 'inventario' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    document.getElementById('tipo').addEventListener('change', function() {
+        var tipoId = this.value;
+        var listaIngredientes = document.getElementById('lista-ingredientes');
+        // Limpiar la lista de ingredientes
+        listaIngredientes.innerHTML = 'Cargando...';
+        // Corregir la URL para que coincida con la URL de la vista en Django
+        fetch(`/cargar_ingredientes_por_tipo/?tipo_id=${tipoId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Limpiar la lista de ingredientes
+                listaIngredientes.innerHTML = '';
+                // Agregar los ingredientes a la lista
+                data.forEach(ingrediente => {
+                    listaIngredientes.innerHTML += `<p>${ingrediente.nombre}</p>`;
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar ingredientes:', error);
+                // Mostrar mensaje de error
+                listaIngredientes.innerHTML = 'Error al cargar ingredientes';
+            });
+    });
+</script>
+
+{% endblock content %}
